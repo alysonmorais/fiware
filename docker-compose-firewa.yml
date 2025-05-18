@@ -1,0 +1,154 @@
+services:
+
+# MONGODB
+  mongo-db-fiware:
+    image: mongo:4.4
+    hostname: mongo-db-fiware
+    container_name: mongo-db-fiware
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/volumes-docker/mongo-db-fiware:/data
+
+# POSTGRES
+  postgres:
+     restart: always
+     image: postgres
+     environment:
+      - POSTGRES_PASSWORD=123456
+     volumes:
+      - ~/volumes-docker/postgres-data:/var/lib/postgresql/data
+
+# ELASTICSEARCH
+  elasticsearch:
+     restart: always
+     image: elasticsearch:2.4
+     volumes:
+      - ~/volumes-docker/elasticsearch-data:/usr/share/elasticsearch/data
+     command: elasticsearch -Des.index.max_result_window=50000
+
+# MEMCACHED
+  memcached:
+     restart: always
+     image: memcached:1
+     command: memcached -m 2048m
+
+# ORION CONTEXT BROKER
+  orion:
+    image: fiware/orion
+    hostname: fiware-orion
+    container_name: fiware-orion
+    depends_on:
+      - mongo-db-fiware
+    ports:
+      - "1026:1026"
+    command: -dbURI mongodb://mongo-db-fiware:27017 -logLevel DEBUG
+
+# CYGNUS 
+  cygnus:
+    image: fiware/cygnus-ngsi
+    hostname: cygnus
+    container_name: fiware-cygnus
+    networks:
+      - default
+    depends_on:
+      - mongo-db-fiware
+    ports:
+      - "5051:5051"
+      - "5080:5080"
+    environment:
+      - "CYGNUS_MONGO_HOSTS=mongo-db-fiware:27017"
+      - "CYGNUS_LOG_LEVEL=DEBUG"
+      - "CYGNUS_SERVICE_PORT=5051"
+      - "CYGNUS_API_PORT=5080"     
+
+# STH COMET     
+  fiware-sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    hostname: fiware-sth-comet
+    container_name: fiware-sth-comet
+    depends_on:
+      - mongo-db-fiware
+    ports:
+     - "8666:8666"
+    environment:
+    - "STH_HOST=0.0.0.0"
+    - "DB_URI=mongo-db-fiware:27017"
+    - "DATA_MODEL=collection-per-entity"
+    - "LOGOPS_LEVEL=DEBUG"
+
+# WIRECLOUD
+  wirecloud:
+     restart: always
+     image: fiware/wirecloud
+     depends_on:
+      - postgres
+      - elasticsearch
+      - memcached
+     environment:
+      - DEBUG=False
+      #- DEFAULT_THEME=wirecloud.defaulttheme
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=123456
+      - FORWARDED_ALLOW_IPS=*
+      - ELASTICSEARCH2_URL=http://elasticsearch:9200/
+      - MEMCACHED_LOCATION=memcached:11211
+      # Uncomment the following environment variables to enable IDM integration
+      #- FIWARE_IDM_SERVER=${FIWARE_IDM_SERVER}
+      #- SOCIAL_AUTH_FIWARE_KEY=${SOCIAL_AUTH_FIWARE_KEY}
+      #- SOCIAL_AUTH_FIWARE_SECRET=${SOCIAL_AUTH_FIWARE_SECRET}
+     volumes:
+      - ~/volumes-docker/wirecloud-data:/opt/wirecloud_instance/data
+      - ~/volumes-docker/wirecloud-static:/var/www/static
+
+# NGINX        
+  nginx:
+     restart: always
+     image: nginx
+     ports:
+      - "80:80"
+     volumes:
+      - ~/volumes-docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ~/volumes-docker/wirecloud-static:/var/www/static:ro
+     depends_on:
+      - wirecloud
+
+# GRAFANA
+  grafana:
+     image: grafana/grafana-enterprise
+     container_name: grafana
+     restart: unless-stopped
+     environment:
+      - GF_SERVER_ROOT_URL=http://my.grafana.server/
+      - GF_PLUGINS_PREINSTALL=grafana-clock-panel
+     ports:
+      - '3000:3000'
+     user: '0'
+     volumes:
+      - ~/volumes-docker/grafana_storage:/var/lib/grafana
+
+# KEYCLOAK
+  keycloak:
+     image: quay.io/keycloak/keycloak
+     environment:
+       - KEYCLOAK_ADMIN=admin
+       - KEYCLOAK_ADMIN_PASSWORD=admin123
+     ports: 
+      - '8080:8080'
+     command: start-dev
+
+
+
+networks:
+  default:
+    labels:
+      org.fiware: 'fiware'
+volumes:
+  nginx:
+  wirecloud-static:
+  wirecloud-data:
+  postgres-data:
+  elasticsearch-data:
+  mongo-db-fiware:
+  grafana_storage:
