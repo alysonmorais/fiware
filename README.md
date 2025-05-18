@@ -12,6 +12,7 @@
 # Visualização de Dados:  
   
   WireCloud                                -> http://localhost
+  Obs: Concluir configuração de acordo com a documentação -> https://wirecloud.readthedocs.io/en/stable/installation_guide/#database-population)
   
   Grafana                                  -> http://localhost:3000
 
