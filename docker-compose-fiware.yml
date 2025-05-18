@@ -128,15 +128,15 @@ services:
       - ~/volumes-docker/grafana_storage:/var/lib/grafana
 
 # KEYCLOAK
-  keycloak:
-     image: quay.io/keycloak/keycloak
-     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin123
-     ports: 
-      - '8080:8080'
-     command: start-dev
-
+#  keycloak:
+#     image: quay.io/keycloak/keycloak
+#     environment:
+#      - KEYCLOAK_ADMIN=admin
+#      - KEYCLOAK_ADMIN_PASSWORD=admin123
+#     ports: 
+#     - '8080:8080'
+#    command: start-dev
+#
 networks:
   default:
     labels:
