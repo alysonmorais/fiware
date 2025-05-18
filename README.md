@@ -3,23 +3,21 @@
 
 # Serviços:
 
-  FIWARE Short Time Historic (STH) - Comet -> http://192.168.56.102/comet
+  FIWARE Short Time Historic (STH) - Comet -> http://localhost/comet
   
-  FIWARE Cygnus                            -> http://192.168.56.102/cygnus
+  FIWARE Cygnus                            -> http://localhost/cygnus
   
-  FIWARE Orion Context Broker              -> http://192.168.56.102/orion
+  FIWARE Orion Context Broker              -> http://localhost/orion
 
-# Visualização de Dados: 
+# Visualização de Dados:  
   
+  WireCloud                                -> http://localhost
   
-  WireCloud                                -> http://192.168.56.102
-  
-  Grafana                                  -> http://192.168.56.102:3000
-
+  Grafana                                  -> http://localhost:3000
 
 # Demais ferramentas:
 
-  Nginx
+  NGINX
   
   Postgres
   
