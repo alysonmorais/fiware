@@ -3,18 +3,18 @@
 
 # Serviços:
 
-  FIWARE Short Time Historic (STH) - Comet -> http://localhost/comet
+  FIWARE Short Time Historic (STH) - Comet -> http://HostIP/comet
   
-  FIWARE Cygnus                            -> http://localhost/cygnus
+  FIWARE Cygnus                            -> http://HostIP/cygnus
   
-  FIWARE Orion Context Broker              -> http://localhost/orion
+  FIWARE Orion Context Broker              -> http://HostIP/orion
 
 # Visualização de Dados:  
   
-  WireCloud                                -> http://localhost
+  WireCloud                                -> http://HostIP
   Obs: Concluir configuração de acordo com a documentação -> https://wirecloud.readthedocs.io/en/stable/installation_guide/#database-population)
   
-  Grafana                                  -> http://localhost:3000
+  Grafana                                  -> http://HostIP:3000
 
 # Demais ferramentas:
 
