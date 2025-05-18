@@ -1,5 +1,4 @@
 services:
-
 # MONGODB
   mongo-db-fiware:
     image: mongo:4.4
@@ -132,13 +131,11 @@ services:
   keycloak:
      image: quay.io/keycloak/keycloak
      environment:
-       - KEYCLOAK_ADMIN=admin
-       - KEYCLOAK_ADMIN_PASSWORD=admin123
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin123
      ports: 
       - '8080:8080'
      command: start-dev
-
-
 
 networks:
   default:
