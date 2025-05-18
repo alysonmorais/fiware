@@ -12,13 +12,14 @@
 # Visualização de Dados:  
   
   WireCloud                                -> http://HostIP
-  Obs: Concluir configuração de acordo com a documentação -> https://wirecloud.readthedocs.io/en/stable/installation_guide/#database-population)
+  Obs.: Concluir configuração de acordo com a documentação -> https://wirecloud.readthedocs.io/en/stable/installation_guide/#database-population)
   
   Grafana                                  -> http://HostIP:3000
 
 # Demais ferramentas:
 
   NGINX
+  Obs.: Na primeira inicialização, o Docker criará o volume persistente do NGINX com um subdiretório 'nginx.conf'. É preciso excluir o subdiretório 'nginx.conf' e copiar o arquivo 'nginx.conf' para o diretório '~/volumes-docker/nginx/'.
 
   KeyCloak (Implentar se houver tempo)
   
