@@ -5,7 +5,8 @@
 
   FIWARE Short Time Historic (STH) - Comet -> http://HostIP/comet
   
-  FIWARE Cygnus                            -> http://HostIP/cygnus
+  FIWARE Cygnus (PORTA 5080)               -> http://HostIP/cygnus5080
+  FIWARE Cygnus (PORTA 5051)               -> http://HostIP/cygnus5051
   
   FIWARE Orion Context Broker              -> http://HostIP/orion
 
