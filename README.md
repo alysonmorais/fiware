@@ -22,8 +22,6 @@
   NGINX
   
   Obs.: Na primeira inicialização, o Docker criará o volume persistente do NGINX com um subdiretório 'nginx.conf'. É preciso excluir o subdiretório 'nginx.conf' e copiar o arquivo 'nginx.conf' deste repositório para o diretório '~/volumes-docker/nginx/'.
-
-  *KeyCloak
   
   Postgres
   
@@ -32,3 +30,5 @@
   Elasticsearch
   
   Memcached
+
+  *KeyCloak (Pendente)
