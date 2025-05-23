@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "5001f4a0-6c42-45d6-bf91-e06effe7afc0",
+		"name": "fiware",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4390317"
+	},
+	"item": [
+		{
+			"name": "orion",
+			"item": [
+				{
+					"name": "1 - verificar versao orion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:1026/version",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"version"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2 -criar entidade de contexto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"estacao\",\n  \"id\": \"estacao1\",\n  \"temperature\": {\n    \"value\": 25.7\n  },\n  \"humidity\": {\n    \"value\": 60\n  },\n  \"location\": {\n    \"value\": \"-5.8763726, -35.2864475\",\n    \"type\": \"geo:point\",\n    \"metadata\": {\n      \"crs\": {\n        \"value\": \"WGS84\"\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:1026/v2/entities",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3 - consultar entidade via id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:1026/v2/entities?entityId=estacao1",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "entityId",
+									"value": "estacao1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - consultar entidade via tipo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:1026/v2/entities?type=estacao",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "estacao"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5 - consultar entidade via query",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:1026/v2/entities?q=temperature>20;humidity<80",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "temperature>20;humidity<80"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6 - remover entidade via id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:1026/v2/entities/estacao1",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities",
+								"estacao1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7 - consultar atributo de uma entidade",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:1026/v2/entities/estacao1/attrs/temperature",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities",
+								"estacao1",
+								"attrs",
+								"temperature"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8 - atualizar atributo",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": 29.7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:1026/v2/entities/estacao1/attrs/temperature",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities",
+								"estacao1",
+								"attrs",
+								"temperature"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9 - realizar subscrição",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Subscrição todas as estações meteorologicas\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \".*\",\n        \"type\": \"estacao\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [ \"temperature\" ],\n      \"expression\": {\n        \"q\": \"temperature>20\"\n      }\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://172.17.0.1:5051/notify\"\n    },\n    \"attrs\": [\"temperature\", \"humidity\"]\n  },            \n  \"expires\": \"2025-04-05T14:00:00.00Z\",\n  \"throttling\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:1026/v2/subscriptions",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10 - listar subscrições",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:1026/v2/subscriptions",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11 - registrar fonte de contexto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Relative Humidity Context Source\",\n    \"dataProvided\": {\n        \"entities\": [\n            {\n                \"id\": \"estacao20\",\n                \"type\": \"estacao\"\n            }\n        ],\n        \"attrs\": [\n            \"temperature\",\n            \"humidity\"\n        ]\n    },\n    \"provider\": {\n        \"http\": {\n            \"url\": \"http://172.17.0.1:1234\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:1026/v2/registrations",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"registrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12  -consultar fonte de contexto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:1026/v2/registrations?limit=10&offset=0&options=count",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"registrations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "options",
+									"value": "count"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sth_comet",
+			"item": [
+				{
+					"name": "consultar historico",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "default",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8666/STH/v2/entities/estacao1/attrs/temperature?type=estacao&hLimit=3&hOffset=0&dateFrom=2024-01-01T00:00:00.000Z&dateTo=2025-12-20T23:59:59.999Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8666",
+							"path": [
+								"STH",
+								"v2",
+								"entities",
+								"estacao1",
+								"attrs",
+								"temperature"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "estacao"
+								},
+								{
+									"key": "hLimit",
+									"value": "3"
+								},
+								{
+									"key": "hOffset",
+									"value": "0"
+								},
+								{
+									"key": "dateFrom",
+									"value": "2024-01-01T00:00:00.000Z"
+								},
+								{
+									"key": "dateTo",
+									"value": "2025-12-20T23:59:59.999Z"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "IoT Agent MQTT",
+			"item": [
+				{
+					"name": "1 - Criar Serviço",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "treinamento_fiware"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"treinamento_key\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Thing\",\n     \"resource\":    \"\"\n   }\n ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4041/iot/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4041",
+							"path": [
+								"iot",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2 - registrar dispositivo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "treinamento_fiware"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"devices\": [\n   {\n     \"device_id\":   \"estacao1\",\n     \"entity_name\": \"urn:ngsi-ld:Estacao:001\",\n     \"entity_type\": \"Estacao\",\n     \"protocol\":    \"PDI-IoTA-UltraLight\",\n     \"transport\":   \"MQTT\",\n     \"timezone\":    \"America/Recife\",\n     \"attributes\": [\n       { \"object_id\": \"temperature\", \"name\":\"temperature\", \"type\":\"Double\"},\n       { \"object_id\": \"humidity\", \"name\":\"humidity\", \"type\":\"Double\"}\n      ]\n   }\n ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4041/iot/devices",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4041",
+							"path": [
+								"iot",
+								"devices"
+							]
+						},
+						"description": "após registar o dispositivo realizar o segiuinte cmando para enviar uma medição:\n\n`docker run -it --rm --name mqtt-publisher --network dockers_default efrecon/mqtt-client pub -h mosquitto -m 'temperature|20.8' -t \"/treinamento_key/estacao1/attrs\"`"
+					},
+					"response": []
+				},
+				{
+					"name": "3 - Consultar dispositivo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "treinamento_fiware"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:1026/v2/entities/Thing:estacao1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "1026",
+							"path": [
+								"v2",
+								"entities",
+								"Thing:estacao1"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - listar dispositivos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "treinamento_fiware"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4041/iot/devices",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4041",
+							"path": [
+								"iot",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
